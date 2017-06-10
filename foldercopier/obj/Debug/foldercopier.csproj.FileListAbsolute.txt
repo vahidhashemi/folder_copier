@@ -1,0 +1,9 @@
+C:\workspace\foldercopier\foldercopier\bin\Debug\foldercopier.exe.config
+C:\workspace\foldercopier\foldercopier\bin\Debug\foldercopier.exe
+C:\workspace\foldercopier\foldercopier\bin\Debug\foldercopier.pdb
+C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.csprojResolveAssemblyReference.cache
+C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.Form1.resources
+C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.Properties.Resources.resources
+C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.csproj.GenerateResource.Cache
+C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.exe
+C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.pdb
