@@ -10,13 +10,14 @@ using System.Windows.Forms;
 
 namespace foldercopier
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form, IAnswer
     {
         private String srcPath;
         private String dstPath;
         private String templatePath;
         private String conversionPath;
         private Boolean isCreatingDate;
+        private String formTitle = "Folder Copier";
 
         public Form1()
         {
@@ -45,6 +46,17 @@ namespace foldercopier
 
         private void button5_Click(object sender, EventArgs e)
         {
+            if (btnStart.Text.ToLower().Equals("start"))
+            {
+                timer1.Enabled = false;
+
+            }
+            InputBox inputbox = new InputBox();
+            inputbox.setAnswer(this);
+            inputbox.ShowDialog(this);
+
+             
+            timer1.Enabled = true;
 
         }
 
@@ -57,7 +69,9 @@ namespace foldercopier
         {
             if (!String.IsNullOrEmpty(srcPath) && !String.IsNullOrEmpty(dstPath)
                 && !String.IsNullOrEmpty(templatePath) && !String.IsNullOrEmpty(conversionPath))
+            {
                 btnStart.Enabled = true;
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -74,6 +88,45 @@ namespace foldercopier
                 enableSartButton();
             }
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "HTML |*.html;*.htm";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                templatePath = openFileDialog1.FileName;
+                enableSartButton();
+//                MessageBox.Show(templatePath);
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "Convesion Table |*.txt";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                conversionPath = openFileDialog1.FileName;
+                enableSartButton();
+                //                MessageBox.Show(templatePath);
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+//            MessageBox.Show("slam");
+        }
+
+        public void answer(string title)
+        {
+            // after getting data from job title. We will enable timer to do it is job
+            if (String.IsNullOrEmpty(title))
+                MessageBox.Show("Please choose a job Title");
+            else
+            {
+                this.Text = formTitle + " | " + title;
+                timer1.Enabled = true;
+            }
         }
     }
 }

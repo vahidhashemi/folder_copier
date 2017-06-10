@@ -40,11 +40,11 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.lblSrc = new System.Windows.Forms.Label();
             this.lblDst = new System.Windows.Forms.Label();
+            this.lblSrc = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -87,6 +87,7 @@
             this.button3.TabIndex = 3;
             this.button3.Text = "Select Template HTML";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
@@ -96,6 +97,7 @@
             this.button4.TabIndex = 4;
             this.button4.Text = "Select Conversion Table";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // btnStart
             // 
@@ -112,6 +114,11 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.lblDst);
@@ -127,13 +134,32 @@
             this.groupBox1.Text = "Log";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
-            // listBox1
+            // lblDst
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(6, 69);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(452, 121);
-            this.listBox1.TabIndex = 0;
+            this.lblDst.AutoSize = true;
+            this.lblDst.Location = new System.Drawing.Point(79, 44);
+            this.lblDst.Name = "lblDst";
+            this.lblDst.Size = new System.Drawing.Size(29, 13);
+            this.lblDst.TabIndex = 4;
+            this.lblDst.Text = "Path";
+            // 
+            // lblSrc
+            // 
+            this.lblSrc.AutoSize = true;
+            this.lblSrc.Location = new System.Drawing.Point(60, 20);
+            this.lblSrc.Name = "lblSrc";
+            this.lblSrc.Size = new System.Drawing.Size(29, 13);
+            this.lblSrc.TabIndex = 3;
+            this.lblSrc.Text = "Path";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 44);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(66, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Destination: ";
             // 
             // label1
             // 
@@ -145,32 +171,13 @@
             this.label1.Text = "Source: ";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // label2
+            // listBox1
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 44);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Destination: ";
-            // 
-            // lblSrc
-            // 
-            this.lblSrc.AutoSize = true;
-            this.lblSrc.Location = new System.Drawing.Point(60, 20);
-            this.lblSrc.Name = "lblSrc";
-            this.lblSrc.Size = new System.Drawing.Size(29, 13);
-            this.lblSrc.TabIndex = 3;
-            this.lblSrc.Text = "Path";
-            // 
-            // lblDst
-            // 
-            this.lblDst.AutoSize = true;
-            this.lblDst.Location = new System.Drawing.Point(79, 44);
-            this.lblDst.Name = "lblDst";
-            this.lblDst.Size = new System.Drawing.Size(29, 13);
-            this.lblDst.TabIndex = 4;
-            this.lblDst.Text = "Path";
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(6, 69);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(452, 121);
+            this.listBox1.TabIndex = 0;
             // 
             // Form1
             // 

@@ -7,3 +7,4 @@ C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.Properties.Resourc
 C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.csproj.GenerateResource.Cache
 C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.exe
 C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.pdb
+C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.InputBox.resources
