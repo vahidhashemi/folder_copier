@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +20,7 @@ namespace foldercopier
         private String conversionPath;
         private Boolean isCreatingDate;
         private String formTitle = "Folder Copier";
+        private Boolean isStarted = false;
 
         public Form1()
         {
@@ -26,6 +29,8 @@ namespace foldercopier
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            isStarted = false;
+            btnStart.Enabled = false;
 
         }
 
@@ -46,18 +51,21 @@ namespace foldercopier
 
         private void button5_Click(object sender, EventArgs e)
         {
+            isCreatingDate = checkBox1.Checked;
             if (btnStart.Text.ToLower().Equals("start"))
             {
-                timer1.Enabled = false;
-
+                InputBox inputbox = new InputBox();
+                inputbox.setAnswer(this);
+                inputbox.ShowDialog(this);
+                timer1.Enabled = true;
+                btnStart.Text = "Stop";
             }
-            InputBox inputbox = new InputBox();
-            inputbox.setAnswer(this);
-            inputbox.ShowDialog(this);
-
-             
-            timer1.Enabled = true;
-
+            else //Stop Clicked
+            {
+                timer1.Enabled = false;
+                btnStart.Text = "Start";
+                this.Text = formTitle + " | Not Working";
+            }
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -114,8 +122,34 @@ namespace foldercopier
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-//            MessageBox.Show("slam");
+            String actualDstPath;
+            if (isCreatingDate)
+                actualDstPath = createFolder(true);
+            else
+                actualDstPath = createFolder(false);
+
         }
+
+        private String createFolder(bool hasDate)
+        {
+            String actualPath;
+            if (hasDate)
+            {
+                String yearPath = Path.Combine(dstPath , DateTime.Now.Year + "");
+                String monthPath = Path.Combine(yearPath , DateTime.Now.Month + "");
+                String dayPath = Path.Combine(monthPath, DateTime.Now.Day + "");
+
+                if (!Directory.Exists(yearPath))
+                    Directory.CreateDirectory(yearPath);
+                if (!Directory.Exists(monthPath))
+                    Directory.CreateDirectory(monthPath);
+                if (!Directory.Exists(dayPath))
+                    Directory.CreateDirectory(dayPath);
+                return dayPath;
+            }
+            return dstPath;
+        }
+
 
         public void answer(string title)
         {
