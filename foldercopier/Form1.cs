@@ -16,11 +16,13 @@ namespace foldercopier
     {
         private String srcPath;
         private String dstPath;
+        private String dstImagePath;
         private String templatePath;
         private String conversionPath;
         private Boolean isCreatingDate;
         private String formTitle = "Folder Copier";
         private Boolean isStarted = false;
+        
 
         public Form1()
         {
@@ -76,7 +78,8 @@ namespace foldercopier
         private void enableSartButton()
         {
             if (!String.IsNullOrEmpty(srcPath) && !String.IsNullOrEmpty(dstPath)
-                && !String.IsNullOrEmpty(templatePath) && !String.IsNullOrEmpty(conversionPath))
+                && !String.IsNullOrEmpty(templatePath) && !String.IsNullOrEmpty(conversionPath)
+                && !String.IsNullOrEmpty(dstImagePath))
             {
                 btnStart.Enabled = true;
             }
@@ -123,14 +126,42 @@ namespace foldercopier
         private void timer1_Tick(object sender, EventArgs e)
         {
             String actualDstPath;
+            String actualImagePath;
             if (isCreatingDate)
-                actualDstPath = createFolder(true);
+                actualDstPath = createFolder(dstPath, true);
             else
-                actualDstPath = createFolder(false);
+                actualDstPath = createFolder(dstPath, false);
+            // there will be two different path. Make sure to behave the same for image path
+            if (!dstImagePath.Equals(dstPath)) 
+            {
+                if (isCreatingDate)
+                    actualImagePath = createFolder(dstImagePath, true);
+                else
+                    actualImagePath = createFolder(dstImagePath, false);
+            }
+            else
+            {
+                actualImagePath = actualDstPath;
+            }
 
+            String[] files = Directory.GetFiles(srcPath);
+            
+            foreach (var file in files)
+            {
+                String ext = Path.GetExtension(file).ToLower();
+                if (ext.Contains(".jpg") || ext.Contains(".jpeg"))
+                {
+                    File.Copy(file, Path.Combine(actualImagePath, Path.GetFileName(file)));
+                }
+                else
+                {
+                    File.Copy(file, Path.Combine(actualDstPath, Path.GetFileName(file)));
+                }
+                File.Delete(file);
+            }
         }
 
-        private String createFolder(bool hasDate)
+        private String createFolder(String dstPath, bool hasDate)
         {
             String actualPath;
             if (hasDate)
@@ -160,6 +191,21 @@ namespace foldercopier
             {
                 this.Text = formTitle + " | " + title;
                 timer1.Enabled = true;
+            }
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                lblImageDst.Text = folderBrowserDialog1.SelectedPath;
+                dstImagePath = folderBrowserDialog1.SelectedPath;
+                enableSartButton();
             }
         }
     }
