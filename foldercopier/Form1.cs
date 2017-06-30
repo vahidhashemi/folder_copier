@@ -6,9 +6,11 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace foldercopier
 {
@@ -22,7 +24,11 @@ namespace foldercopier
         private Boolean isCreatingDate;
         private String formTitle = "Folder Copier";
         private Boolean isStarted = false;
-        
+        private String txtBaseUrl = "Enter Image Server Base URL e.g: http://192.168.1.1/img/";
+        private HtmlDocument htmlTemplate;
+        private Dictionary<String, String>  convertTable = new Dictionary<string, string>();
+        private String convertSeparator = "->";
+        private List<Dictionary<String, String>>  conversions = new List<Dictionary<string, string>>();
 
         public Form1()
         {
@@ -33,7 +39,8 @@ namespace foldercopier
         {
             isStarted = false;
             btnStart.Enabled = false;
-
+            txtImgBaseUrl.Text = "Enter Image Server Base URL e.g: http://192.168.1.1/img/";
+            htmlTemplate = new HtmlAgilityPack.HtmlDocument();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -107,6 +114,7 @@ namespace foldercopier
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 templatePath = openFileDialog1.FileName;
+                htmlTemplate.Load(templatePath);
                 enableSartButton();
 //                MessageBox.Show(templatePath);
             }
@@ -118,12 +126,28 @@ namespace foldercopier
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 conversionPath = openFileDialog1.FileName;
+                fillConversionTable(conversionPath);
                 enableSartButton();
                 //                MessageBox.Show(templatePath);
             }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                doCopy();
+            }
+            catch (Exception ex)
+            {
+
+                log("Error : " + ex.Message);
+            }
+            
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        private void  doCopy()
         {
             String actualDstPath;
             String actualImagePath;
@@ -147,20 +171,111 @@ namespace foldercopier
             String[] files = Directory.GetFiles(srcPath);
             
             foreach (var file in files)
-            {
+                {
                 String ext = Path.GetExtension(file).ToLower();
                 if (ext.Contains(".jpg") || ext.Contains(".jpeg"))
                 {
-                    File.Copy(file, Path.Combine(actualImagePath, Path.GetFileName(file)));
+                    
+                    try
+                    {
+                        File.Copy(file, Path.Combine(actualImagePath, Path.GetFileName(file)));
+                    }
+                    catch (IOException ex)
+                    {
+                        File.Copy(file, Path.Combine(actualImagePath, Path.GetFileName(file)), true);
+                        log("Warnning : " + file + " Replaced");
+                    }
+                    
                 }
                 else
                 {
-                    File.Copy(file, Path.Combine(actualDstPath, Path.GetFileName(file)));
+                    try
+                    {
+                        //Before copying file we have to change the template
+                        changeTemplate(file, Path.Combine(actualDstPath, Path.GetFileName(file)));
+//                        File.Copy(file, Path.Combine(actualDstPath, Path.GetFileName(file)));
+                    }
+                    catch (Exception)
+                    {
+
+                        changeTemplate(file, Path.Combine(actualDstPath, Path.GetFileName(file)));
+                        log("Warnning : " + file + " Replaced");
+                    }
+                    
                 }
                 File.Delete(file);
             }
         }
 
+        private String changeTemplate(String oldFilePath, String newFilePath)
+        {
+            var html = new HtmlAgilityPack.HtmlDocument();
+            html.Load(oldFilePath);
+            foreach (var conversion in conversions)
+            {
+                String oldTag = conversion.ElementAt(0).Key;
+                String newTag = conversion.ElementAt(0).Value;
+                
+                if (oldTag.Trim().Equals("[img]"))
+                {
+                    String imgFile = Path.GetFileName(newFilePath);
+                    imgFile = imgFile.Replace(".htm", ".jpg");
+                    imgFile = imgFile.Replace(".html", ".jpg");
+                    String newFileName = txtImgBaseUrl.Text + getCurrentDateForWeb() + imgFile;
+                    htmlTemplate.DocumentNode
+                        .SelectNodes(newTag.Trim())
+                        .First()
+                        .Attributes["src"].Value = newFileName;
+                } 
+                else
+                {
+                    String oldHtmlData = html.DocumentNode
+                    .SelectNodes(oldTag.Trim())
+                    .First()
+                    .Attributes["value"].Value;
+
+                    htmlTemplate.DocumentNode
+                        .SelectNodes(newTag.Trim())
+                        .First()
+                        .Attributes["value"].Value = oldHtmlData;
+                }
+                
+            }
+            using (FileStream fs = new FileStream(newFilePath, FileMode.Create))
+            {
+                Stream stream = GenerateStreamFromString(htmlTemplate.DocumentNode.OuterHtml);
+
+                byte[] bytesInStream = new byte[stream.Length];
+                stream.Read(bytesInStream, 0, bytesInStream.Length);
+                // Use write method to write to the file specified above
+                fs.Write(bytesInStream, 0, bytesInStream.Length);
+            }
+
+            return "";
+        }
+
+        private void fillConversionTable(string convertFile)
+        {
+            String[] conversionTable = System.IO.File.ReadAllLines(convertFile);
+            foreach (string line in conversionTable)
+            {
+                String[] data = line.Split(new []{convertSeparator}, StringSplitOptions.None);
+                
+                String oldTag = data[0];
+                String newTag = data[1];
+                conversions.Add(new Dictionary<string, string>(){{oldTag, newTag}});
+
+                int i = 0;
+            }
+        }
+
+        private String getCurrentDateForWeb()
+        {
+            String year = DateTime.Now.Year + "";
+            String month = DateTime.Now.Month + "";
+            String day = DateTime.Now.Day + "";
+            return year + "/" + month + "/" + day + "/";
+        } 
         private String createFolder(String dstPath, bool hasDate)
         {
             String actualPath;
@@ -181,6 +296,15 @@ namespace foldercopier
             return dstPath;
         }
 
+         public Stream GenerateStreamFromString(string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream, Encoding.GetEncoding(1256));
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
 
         public void answer(string title)
         {
@@ -207,6 +331,36 @@ namespace foldercopier
                 dstImagePath = folderBrowserDialog1.SelectedPath;
                 enableSartButton();
             }
+        }
+
+        private void txtImgBaseUrl_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void txtImgBaseUrl_Enter(object sender, EventArgs e)
+        {
+            
+            if (txtImgBaseUrl.Text.Length == 0 ||
+                txtImgBaseUrl.Text.Equals(txtBaseUrl))
+                txtImgBaseUrl.Text = "";
+
+        }
+
+        private void txtImgBaseUrl_Leave(object sender, EventArgs e)
+        {
+            if (txtImgBaseUrl.Text.Length == 0)
+                txtImgBaseUrl.Text = txtBaseUrl;
+
+        }
+
+        private void log(String message)
+        {
+            lstLog.Items.Add(message);
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

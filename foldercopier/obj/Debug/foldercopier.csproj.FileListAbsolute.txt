@@ -8,3 +8,6 @@ C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.csproj.GenerateRes
 C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.exe
 C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.pdb
 C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.csprojResolveAssemblyReference.cache
+C:\workspace\foldercopier\foldercopier\bin\Debug\HtmlAgilityPack.dll
+C:\workspace\foldercopier\foldercopier\bin\Debug\HtmlAgilityPack.pdb
+C:\workspace\foldercopier\foldercopier\bin\Debug\HtmlAgilityPack.xml

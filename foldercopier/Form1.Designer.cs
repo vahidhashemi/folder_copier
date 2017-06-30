@@ -39,14 +39,16 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnExport = new System.Windows.Forms.Button();
+            this.lblImageDst = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.lblDst = new System.Windows.Forms.Label();
             this.lblSrc = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.lblImageDst = new System.Windows.Forms.Label();
+            this.lstLog = new System.Windows.Forms.ListBox();
             this.button5 = new System.Windows.Forms.Button();
+            this.txtImgBaseUrl = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,7 +85,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(62, 92);
+            this.button3.Location = new System.Drawing.Point(62, 119);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(364, 23);
             this.button3.TabIndex = 3;
@@ -93,7 +95,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(62, 121);
+            this.button4.Location = new System.Drawing.Point(62, 148);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(364, 23);
             this.button4.TabIndex = 4;
@@ -104,7 +106,7 @@
             // btnStart
             // 
             this.btnStart.Enabled = false;
-            this.btnStart.Location = new System.Drawing.Point(62, 150);
+            this.btnStart.Location = new System.Drawing.Point(62, 177);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(364, 23);
             this.btnStart.TabIndex = 5;
@@ -123,20 +125,50 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnExport);
             this.groupBox1.Controls.Add(this.lblImageDst);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.lblDst);
             this.groupBox1.Controls.Add(this.lblSrc);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.listBox1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 187);
+            this.groupBox1.Controls.Add(this.lstLog);
+            this.groupBox1.Location = new System.Drawing.Point(12, 206);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(464, 225);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(382, 65);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(75, 23);
+            this.btnExport.TabIndex = 7;
+            this.btnExport.Text = "Export";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // lblImageDst
+            // 
+            this.lblImageDst.AutoSize = true;
+            this.lblImageDst.Location = new System.Drawing.Point(108, 68);
+            this.lblImageDst.Name = "lblImageDst";
+            this.lblImageDst.Size = new System.Drawing.Size(29, 13);
+            this.lblImageDst.TabIndex = 6;
+            this.lblImageDst.Text = "Path";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 68);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(95, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Image Destination:";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // lblDst
             // 
@@ -175,32 +207,14 @@
             this.label1.Text = "Source: ";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // listBox1
+            // lstLog
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(6, 94);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(452, 121);
-            this.listBox1.TabIndex = 0;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 68);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(95, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Image Destination:";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
-            // 
-            // lblImageDst
-            // 
-            this.lblImageDst.AutoSize = true;
-            this.lblImageDst.Location = new System.Drawing.Point(108, 68);
-            this.lblImageDst.Name = "lblImageDst";
-            this.lblImageDst.Size = new System.Drawing.Size(29, 13);
-            this.lblImageDst.TabIndex = 6;
-            this.lblImageDst.Text = "Path";
+            this.lstLog.FormattingEnabled = true;
+            this.lstLog.HorizontalScrollbar = true;
+            this.lstLog.Location = new System.Drawing.Point(6, 94);
+            this.lstLog.Name = "lstLog";
+            this.lstLog.Size = new System.Drawing.Size(452, 121);
+            this.lstLog.TabIndex = 0;
             // 
             // button5
             // 
@@ -212,11 +226,22 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click_1);
             // 
+            // txtImgBaseUrl
+            // 
+            this.txtImgBaseUrl.Location = new System.Drawing.Point(62, 93);
+            this.txtImgBaseUrl.Name = "txtImgBaseUrl";
+            this.txtImgBaseUrl.Size = new System.Drawing.Size(364, 20);
+            this.txtImgBaseUrl.TabIndex = 8;
+            this.txtImgBaseUrl.TextChanged += new System.EventHandler(this.txtImgBaseUrl_TextChanged);
+            this.txtImgBaseUrl.Enter += new System.EventHandler(this.txtImgBaseUrl_Enter);
+            this.txtImgBaseUrl.Leave += new System.EventHandler(this.txtImgBaseUrl_Leave);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(488, 424);
+            this.ClientSize = new System.Drawing.Size(488, 436);
+            this.Controls.Add(this.txtImgBaseUrl);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnStart);
@@ -248,7 +273,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lstLog;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblDst;
         private System.Windows.Forms.Label lblSrc;
@@ -256,6 +281,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblImageDst;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.TextBox txtImgBaseUrl;
+        private System.Windows.Forms.Button btnExport;
     }
 }
 
