@@ -11,3 +11,12 @@ C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.csprojResolveAssem
 C:\workspace\foldercopier\foldercopier\bin\Debug\HtmlAgilityPack.dll
 C:\workspace\foldercopier\foldercopier\bin\Debug\HtmlAgilityPack.pdb
 C:\workspace\foldercopier\foldercopier\bin\Debug\HtmlAgilityPack.xml
+C:\workspace\foldercopier\foldercopier\obj\Debug\foldercopier.BatchProcessing.resources
+C:\workspace\foldercopier\foldercopier\bin\Debug\EntityFramework.dll
+C:\workspace\foldercopier\foldercopier\bin\Debug\EntityFramework.SqlServer.dll
+C:\workspace\foldercopier\foldercopier\bin\Debug\System.Data.SQLite.dll
+C:\workspace\foldercopier\foldercopier\bin\Debug\System.Data.SQLite.EF6.dll
+C:\workspace\foldercopier\foldercopier\bin\Debug\System.Data.SQLite.Linq.dll
+C:\workspace\foldercopier\foldercopier\bin\Debug\EntityFramework.xml
+C:\workspace\foldercopier\foldercopier\bin\Debug\EntityFramework.SqlServer.xml
+C:\workspace\foldercopier\foldercopier\bin\Debug\System.Data.SQLite.xml

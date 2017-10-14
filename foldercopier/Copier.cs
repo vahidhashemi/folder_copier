@@ -24,6 +24,67 @@ namespace foldercopier
 
 
         }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void doSingleCopy(String dstPath, String dstImagePath, String srcFile, bool isCreatingDate)
+        {
+            String actualDstPath;
+            String actualImagePath;
+            if (isCreatingDate)
+                actualDstPath = createFolder(dstPath, true);
+            else
+                actualDstPath = createFolder(dstPath, false);
+            // there will be two different path. Make sure to behave the same for image path
+            if (!dstImagePath.Equals(dstPath))
+            {
+                if (isCreatingDate)
+                    actualImagePath = createFolder(dstImagePath, true);
+                else
+                    actualImagePath = createFolder(dstImagePath, false);
+            }
+            else
+            {
+                actualImagePath = actualDstPath;
+            }
+
+//            String[] files = Directory.GetFiles(srcPath);
+
+//            foreach (var file in files)
+//            {
+                String ext = Path.GetExtension(srcFile).ToLower();
+                if (ext.Contains(".jpg") || ext.Contains(".jpeg"))
+                {
+
+                    try
+                    {
+                        File.Copy(srcFile, Path.Combine(actualImagePath, Path.GetFileName(srcFile)));
+                    }
+                    catch (IOException ex)
+                    {
+                        File.Copy(srcFile, Path.Combine(actualImagePath, Path.GetFileName(srcFile)), true);
+                        log("Warnning : " + srcFile + " Replaced");
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        //Before copying file we have to change the template
+                        changeTemplate(srcFile, "");
+//                        changeTemplate(srcFile, Path.Combine(actualDstPath, Path.GetFileName(srcFile)));
+                        //                        File.Copy(file, Path.Combine(actualDstPath, Path.GetFileName(file)));
+                    }
+                    catch (Exception)
+                    {
+                        changeTemplate(srcFile, "");
+                        log("Warnning : " + srcFile + " Replaced");
+                    }
+
+                }
+//                File.Delete(srcFile);
+//            }
+
+        }
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void doCopy(String dstPath, String dstImagePath, String srcPath, bool isCreatingDate)
         {
@@ -85,25 +146,32 @@ namespace foldercopier
             }
         }
 
-        private String changeTemplate(String oldFilePath, String newFilePath)
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        private String changeTemplate(String oldFilePath, String newFilePath="")
         {
+            string newFile = newFilePath;
+            if (newFilePath == "")
+                newFile = oldFilePath;
             var html = new HtmlAgilityPack.HtmlDocument();
             html.Load(oldFilePath);
             foreach (var conversion in conversions)
             {
                 String oldTag = conversion.ElementAt(0).Key;
                 String newTag = conversion.ElementAt(0).Value;
-
+              
                 if (oldTag.Trim().Equals("[img]"))
                 {
-                    String imgFile = Path.GetFileName(newFilePath);
-                    imgFile = imgFile.Replace(".htm", ".jpg");
-                    imgFile = imgFile.Replace(".html", ".jpg");
-                    String newFileName = baseUrl + getCurrentDateForWeb() + imgFile;
-                    htmlTemplate.DocumentNode
-                        .SelectNodes(newTag.Trim())
-                        .First()
-                        .Attributes["src"].Value = newFileName;
+                    if (newFilePath != "")
+                    {
+                        String imgFile = Path.GetFileName(newFilePath);
+                        imgFile = imgFile.Replace(".htm", ".jpg");
+                        imgFile = imgFile.Replace(".html", ".jpg");
+                        String newFileName = baseUrl + getCurrentDateForWeb() + imgFile;
+                        htmlTemplate.DocumentNode
+                            .SelectNodes(newTag.Trim())
+                            .First()
+                            .Attributes["src"].Value = newFileName;
+                    }
                 }
                 else
                 {
@@ -119,7 +187,7 @@ namespace foldercopier
                 }
 
             }
-            using (FileStream fs = new FileStream(newFilePath, FileMode.Create))
+            using (FileStream fs = new FileStream(newFile, FileMode.Create))
             {
                 Stream stream = GenerateStreamFromString(htmlTemplate.DocumentNode.OuterHtml);
 

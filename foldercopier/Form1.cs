@@ -16,18 +16,18 @@ namespace foldercopier
 {
     public partial class Form1 : Form, IAnswer
     {
-        private String srcPath;
-        private String dstPath;
-        private String dstImagePath;
-        private String templatePath;
-        private String conversionPath;
-        private Boolean isCreatingDate;
-        private String formTitle = "Folder Copier";
-        private Boolean isStarted = false;
-        private String txtBaseUrl = "Enter Image Server Base URL e.g: http://192.168.1.1/img/";
-        private Dictionary<String, String>  convertTable = new Dictionary<string, string>();
-        private String convertSeparator = "->";
-        private List<Dictionary<String, String>>  conversions = new List<Dictionary<string, string>>();
+        public static String srcPath;
+        public static String dstPath;
+        public static String dstImagePath;
+        public static String templatePath;
+        public static String conversionPath;
+        public static Boolean isCreatingDate;
+        public static String formTitle = "Folder Copier";
+        public static Boolean isStarted = false;
+        public static String txtBaseUrl = "Enter Image Server Base URL e.g: http://192.168.1.1/img/";
+        public static Dictionary<String, String>  convertTable = new Dictionary<string, string>();
+        public static String convertSeparator = "->";
+        public static List<Dictionary<String, String>>  conversions = new List<Dictionary<string, string>>();
 
         public Form1()
         {
@@ -65,6 +65,8 @@ namespace foldercopier
                 inputbox.setAnswer(this);
                 inputbox.ShowDialog(this);
                 timer1.Enabled = true;
+                txtBaseUrl = txtImgBaseUrl.Text; 
+
                 btnStart.Text = "Stop";
             }
             else //Stop Clicked
@@ -82,6 +84,9 @@ namespace foldercopier
 
         private void enableSartButton()
         {
+            txtBaseUrl = txtImgBaseUrl.Text;
+            isCreatingDate = checkBox1.Checked;
+
             if (!String.IsNullOrEmpty(srcPath) && !String.IsNullOrEmpty(dstPath)
                 && !String.IsNullOrEmpty(templatePath) && !String.IsNullOrEmpty(conversionPath)
                 && !String.IsNullOrEmpty(dstImagePath))
@@ -133,6 +138,7 @@ namespace foldercopier
         {
             try
             {
+
                 Copier copier = new Copier(conversions, templatePath, txtImgBaseUrl.Text);
                 copier.doCopy(dstPath, dstImagePath, srcPath, isCreatingDate);
             }
@@ -215,7 +221,13 @@ namespace foldercopier
 
         private void btnExport_Click(object sender, EventArgs e)
         {
+            lstLog.Items.Clear();
+        }
 
+        private void button6_Click(object sender, EventArgs e)
+        {
+            BatchProcessing batchProcessing = new BatchProcessing();
+            batchProcessing.Show(this);
         }
     }
 }

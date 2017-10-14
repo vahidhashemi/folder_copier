@@ -49,6 +49,7 @@
             this.lstLog = new System.Windows.Forms.ListBox();
             this.button5 = new System.Windows.Forms.Button();
             this.txtImgBaseUrl = new System.Windows.Forms.TextBox();
+            this.button6 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -108,7 +109,7 @@
             this.btnStart.Enabled = false;
             this.btnStart.Location = new System.Drawing.Point(62, 177);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(364, 23);
+            this.btnStart.Size = new System.Drawing.Size(179, 23);
             this.btnStart.TabIndex = 5;
             this.btnStart.Text = "Start";
             this.btnStart.UseVisualStyleBackColor = true;
@@ -147,7 +148,7 @@
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(75, 23);
             this.btnExport.TabIndex = 7;
-            this.btnExport.Text = "Export";
+            this.btnExport.Text = "Clear";
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
@@ -236,11 +237,22 @@
             this.txtImgBaseUrl.Enter += new System.EventHandler(this.txtImgBaseUrl_Enter);
             this.txtImgBaseUrl.Leave += new System.EventHandler(this.txtImgBaseUrl_Leave);
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(247, 177);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(179, 23);
+            this.button6.TabIndex = 9;
+            this.button6.Text = "Run Batch Convert";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(488, 436);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.txtImgBaseUrl);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.groupBox1);
@@ -283,6 +295,7 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TextBox txtImgBaseUrl;
         private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.Button button6;
     }
 }
 
